@@ -1,130 +1,102 @@
-# Go-Mongodb-REST-boilerplate
+# Dash Goal/Challenge Platform
 
+You can test the site [here](https://challenge-platform.herokuapp.com/).
 
-![Build](https://github.com/gaquarius/challenge-platform-api/workflows/Go/badge.svg)
-
-
-This repo can be used as a starting point for backend development with Golang. It comes bundled with Docker. The development environment uses `docker-compose` to start dependent services like mongo.
-
-A few things to note in the project:
-* **[Github Actions Workflows](https://github.com/gaquarius/challenge-platform-api/tree/main/.github/workflows)** - Pre-configured Github Actions to run automated builds and publish image to Github Packages
-* **[Dockerfile](https://github.com/gaquarius/challenge-platform-api/blob/main/Dockerfile)** - Dockerfile to generate docker builds.
-* **[docker-compose](https://github.com/gaquarius/challenge-platform-api/blob/main/docker-compose.yml)** - Docker compose script to start service in production mode.
-* **[Containerized Mongo for development](#development)** - Starts a local mongo container with data persistence across runs.
-* **[Mongo Driver](https://go.mongodb.org/mongo-driver)** - MongoDB supported driver for Go.
-* **[Gorilla Mux](https://go.mongodb.org/mongo-driver)** - HTTP request multiplexer.
-* **[jwt-go](https://github.com/dgrijalva/jwt-go)** - Implementation of JWT Tokens.
-* **[Validator](https://gopkg.in/go-playground/validator.v9)** - Package validator implements value validations for structs.
-<!-- * **[OpenAPI 3.0 Spec](https://github.com/sidhantpanda/docker-express-typescript-boilerplate/blob/master/openapi.json)** - A starter template to get started with API documentation using OpenAPI 3.0. This API spec is also available when running the development server at `http://localhost:3000/dev/api-docs` -->
-* **[.env file for configuration](#environment)** - Change server config like app port, mongo url etc
-* **[File Uploads](https://golang.org/pkg/io/)** - io package provides interfaces to I/O primitives.
-* **[httptest](#testing)** - Utilities for HTTP testing.
 
 ## Installation
 
-#### 1. Clone this repo
-
 ```
-$ git clone git@github.com:umangraval/Go-Mongodb-REST-boilerplate.git your-app-name
-$ cd your-app-name
-```
-
-#### 2. Install dependencies
-
-```
-$ go mod vendor
+git clone https://github.com/gaquarius/challenge-platform.git
+cd challenge-platform
+yarn / npm i
 ```
 
-## Development
+### Development server
 
-### Start dev server
-Starting the dev server also starts MongoDB as a service in a docker container using the compose script at `docker-compose.yml`.
-
-```
-$ go run main.go routes.go
-```
-Running the above commands results in 
-* 🌏 **API Server** running at `http://localhost:8080`
-<!-- * ⚙️**Swagger UI** at `http://localhost:3000/dev/api-docs` -->
-* ⛁ **MongoDB** running at `mongodb://localhost:27017/db`
-
-## Packaging and Deployment
-#### 1. Build and run without Docker
-
-```
-$ go build 
-```
-#### 2. Run Tests
-
-```
-$ cd tests
-$ go test
-```
-#### 3. Run with docker
-
-```
-$ docker build -t api-server .
-$ docker run -t -i -p 8080:8080 api-server
+```bash
+yarn dev / npm dev
 ```
 
-#### 4. Run with docker-compose
+You can view the development server at `localhost:3000`.
+(change port in ./config/webpack.dev.js)
 
+### Unit Test
+
+```bash
+ yarn test / npm test
 ```
-$ docker-compose up
+
+### Production build
+
+```bash
+ yarn build / npm run build
 ```
 
+## Features
 
----
+- [React 17](https://reactjs.org/)
+- [Webpack 5](https://webpack.js.org/)
+- [Tailwind 2](https://tailwindcss.com)
+- [Jest 26](http://jestjs.io/)
+- [PostCss](https://postcss.org/)  
+- [Babel](https://babeljs.io/)
+- [Sass](https://sass-lang.com/)
+- [Eslint](https://eslint.org/)
+- [Husky](https://github.com/typicode/husky) ( tks [@rubinj30](https://github.com/rubinj30) )
 
-## Environment
-To edit environment variables, create a file with name `.env` and copy the contents from `.env.default` to start with.
+## Dependencies
 
-| Var Name  | Type  | Default | Description  |
-|---|---|---|---|
-| JWT_SECRET  | string  | `secret` |JWT secret to verify  |
-|  PORT | number  | `8080` | Port to run the API server on |
-|  MONGO_URL | string  | `mongodb://localhost:27017/db` | URL for MongoDB |
+### webpack
 
-<!-- ## Logging
-The application uses [winston](https://github.com/winstonjs/winston) as the default logger. The configuration file is at `src/logger.ts`.
-* All logs are saved in `./logs` directory and at `/logs` in the docker container.
-* The `docker-compose` file has a volume attached to container to expose host directory to the container for writing logs.
-* Console messages are prettified
-* Each line in error log file is a stringified JSON. -->
+- [`webpack`](https://github.com/webpack/webpack) - Module and asset bundler.
+- [`webpack-cli`](https://github.com/webpack/webpack-cli) - Command line interface for webpack
+- [`webpack-dev-server`](https://github.com/webpack/webpack-dev-server) - Development server for webpack
+- [`webpack-merge`](https://github.com/survivejs/webpack-merge) - Simplify development/production configuration
+
+### Babel
+
+- [`@babel/core`](https://www.npmjs.com/package/@babel/core) - Transpile ES6+ to backwards compatible JavaScript
+- [`@babel/plugin-proposal-class-properties`](https://babeljs.io/docs/en/babel-plugin-proposal-class-properties) - Use properties directly on a class (an example Babel config)
+- [`@babel/preset-env`](https://babeljs.io/docs/en/babel-preset-env) - Smart defaults for Babel
+
+### Jest
+
+- [`jest`](https://jestjs.io/) - Delightful JavaScript Testing
+- [`@testing-library/jest-dom`](https://github.com/testing-library/jest-dom#readme) - Custom jest matchers to test the state of the DOM
+- [`@testing-library/react`](https://testing-library.com/docs/react-testing-library/intro/) - Simple and complete React DOM testing utilities
+- [`@testing-library/user-event`](https://github.com/testing-library/user-event#readme) - Fire events the same way the user does
+
+### Loaders
+
+- [`babel-loader`](https://webpack.js.org/loaders/babel-loader/) - Transpile files with Babel and webpack
+- [`sass-loader`](https://webpack.js.org/loaders/sass-loader/) - Load SCSS and compile to CSS
+- [`node-sass`](https://github.com/sass/node-sass) - Node Sass
+- [`css-loader`](https://webpack.js.org/loaders/css-loader/) - Resolve CSS imports
+- [`postcss-loader`](https://webpack.js.org/loaders/postcss-loader/) - Loader to process CSS with PostCSS
+- [`style-loader`](https://webpack.js.org/loaders/style-loader/) - Inject CSS into the DOM
+
+### Eslint
+- [`eslint-config-prettier`](https://www.npmjs.com/package/eslint-config-prettier) - Turns off all rules that are unnecessary or might conflict with Prettier.
+- [`eslint-import-resolver-alias`](https://www.npmjs.com/package/eslint-import-resolver-alias) - a simple Node behavior import resolution plugin for eslint-plugin-import, supporting module alias.
+- [`eslint-plugin-babel`](https://www.npmjs.com/package/eslint-plugin-babel) - an eslint rule plugin companion to babel-eslint.
+- [`eslint-plugin-import`](https://www.npmjs.com/package/eslint-plugin-import) - This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, and prevent issues with misspelling of file paths and import names.
+- [`eslint-plugin-prettier`](https://www.npmjs.com/package/eslint-plugin-prettier) - Runs prettier as an eslint rule.
+- [`eslint-plugin-react`](https://www.npmjs.com/package/eslint-plugin-react) - React specific linting rules for ESLint.
+- [`eslint-plugin-react-hooks`](https://github.com/facebook/react/tree/master/packages/eslint-plugin-react-hooks) - Enforces the Rules of React Hooks.
 
 
-### Directory Structure
+### Plugins
 
-```
-+-- controllers
-|   +-- personController.go
-+-- db
-|   +-- db.go
-+-- handlers
-|   +-- config.go
-|   +-- logs.go
-|   +-- response.go
-|   +-- verifyJWT.go
-+-- models
-|   +-- models.go
-+-- validators
-|   +-- validators.go
-+-- tests
-|   +-- api_test.go
-+-- routes
-|   +-- routes.go
-+-- uploaded
-+-- vendor
-+-- nginx
-|   +-- dev.conf.d
-|   |   +-- nginx.conf
-+-- .env
-+-- .env.default
-+-- .gitignore
-+-- docker-compose.yml
-+-- Dockerfile
-+-- go.mod
-+-- go.sum
-+-- main.go
-+-- README.md
-```
+- [`clean-webpack-plugin`](https://github.com/johnagan/clean-webpack-plugin) - Remove/clean build folders
+- [`copy-webpack-plugin`](https://github.com/webpack-contrib/copy-webpack-plugin) - Copy files to build directory
+- [`html-webpack-plugin`](https://github.com/jantimon/html-webpack-plugin) - Generate HTML files from template
+- [`mini-css-extract-plugin`](https://github.com/webpack-contrib/mini-css-extract-plugin) - Extract CSS into separate files
+- [`optimize-css-assets-webpack-plugin`](https://github.com/NMFR/optimize-css-assets-webpack-plugin) - Optimize and minimize CSS assets
+- [`terser-webpack-plugin`](https://github.com/webpack-contrib/terser-webpack-plugin) - Optimize and minimize JavaScript
+- [`react-refresh-webpack-plugin`](https://github.com/pmmmwh/react-refresh-webpack-plugin) - HMR using React Fast Refresh
+- [`dotenv-webpack`](https://github.com/mrsteele/dotenv-webpack) - Supports dotenv and other environment variables
+- [`@svgr/webpack`](https://github.com/mrsteele/dotenv-webpack) - SVGR can be used as a webpack loader, this way you can import your SVG directly as a React Component.
+- [`babel-jest`](https://www.npmjs.com/package/babel-jest) - Babel jest plugin for transforimg ```.js``` and ```.jsx``` files
+
+
+
