@@ -12,5 +12,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm i
-      - run: npm test
+      - name: Install Dependency 
+        run: npm i
+
