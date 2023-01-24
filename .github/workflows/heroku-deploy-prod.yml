@@ -1,0 +1,41 @@
+name: Prod - Heroku Deploy 
+
+on:
+   pull_request:
+    branches:
+      - main
+    types: close
+   workflow_dispatch:
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+        
+      - name: Setup Nodejs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          
+      - name: Install Dependency 
+        run: npm i
+        
+#       - name: Test 
+#         run: npm test
+
+      - name: Build Application
+        run: npm run build
+      
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "challenge-goal"
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          branch: main
+      
