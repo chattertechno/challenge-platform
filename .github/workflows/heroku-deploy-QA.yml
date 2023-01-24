@@ -1,4 +1,4 @@
-name: Heroku Deploy
+name: QA - Heroku Deploy
 
 on:
    push:
@@ -36,5 +36,5 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "challenge-goal-stage"
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-          branch: main
+          branch: QA
       
