@@ -1,15 +1,17 @@
 name: Heroku Deploy
 
 on:
-  push:
+  push: 
   workflow_dispatch:
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Nodejs
+        uses: actions/setup-node@v3
         with:
           node-version: 16
           
@@ -21,4 +23,10 @@ jobs:
 
       - name: Build Application
         run: npm run build
+      
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "challenge-goal-stage"
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
       
