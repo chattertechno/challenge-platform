@@ -1,4 +1,4 @@
-name: Node.js Package
+name: Heroku Deploy
 
 on:
   push:
@@ -12,6 +12,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+          
       - name: Install Dependency 
         run: npm i
+        
+#       - name: Test 
+#         run: npm test
 
+      - name: Build Application
+        run: npm run build
+      
