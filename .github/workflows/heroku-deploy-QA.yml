@@ -36,5 +36,5 @@ jobs:
           heroku_app_name: "challenge-goal-stage"
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           branch: QA
-          env_file: .env.stage
+          env_file: .env.staging
       
