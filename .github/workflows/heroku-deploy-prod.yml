@@ -37,4 +37,5 @@ jobs:
           heroku_app_name: "challenge-goal"
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           branch: main
+          env_file: .env.production
       
