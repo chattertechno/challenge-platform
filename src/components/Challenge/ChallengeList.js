@@ -41,7 +41,7 @@ export default function ChallengeList() {
     (filters) => {
       const { upcoming, coordinator, goal, startDate } = filters
 
-      const data = challenges.filter((challenge) => {
+      const data = challenges?.filter((challenge) => {
         let result = true
         // upcoming filter
         result &= startDate
@@ -72,7 +72,7 @@ export default function ChallengeList() {
 
   const coordinators = React.useMemo(() => {
     const result = []
-    challenges.forEach((challenge) => {
+    challenges?.forEach((challenge) => {
       if (!challenge.coordinator || result.includes(challenge.coordinator)) {
         return
       }

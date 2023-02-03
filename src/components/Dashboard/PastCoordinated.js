@@ -30,7 +30,7 @@ export default function PastCoordinated(props) {
 
   const data = useMemo(
     () =>
-      challenges.filter(
+      challenges?.filter(
         (challenge) =>
           challenge.end_date &&
           convertFromUTC(challenge.end_date) < new Date() &&
@@ -41,7 +41,7 @@ export default function PastCoordinated(props) {
 
   const totalParticipants = useMemo(
     () =>
-      data.reduce(
+      data?.reduce(
         (sum, current) =>
           sum + (current.participants ? current.participants.length : 0),
         0
@@ -51,7 +51,7 @@ export default function PastCoordinated(props) {
 
   const successRate = useMemo(
     () =>
-      data.length > 0
+      data?.length > 0
         ? (
             (data.filter((item) => item.success === true).length /
               data.length) *
@@ -96,7 +96,7 @@ export default function PastCoordinated(props) {
         </Grid>
         <Grid item xs={12} sm={6}>
           <List>
-            {data.map((item, index) => (
+            {data?.map((item, index) => (
               <ListItem button key={`challenge-${index}`}>
                 {item.success ? (
                   <>

@@ -27,7 +27,7 @@ export default function UpcomingParticipated(props) {
 
   const data = useMemo(
     () =>
-      challenges.filter(
+      challenges?.filter(
         (challenge) =>
           challenge.start_date &&
           convertFromUTC(challenge.start_date) > new Date() &&
@@ -42,7 +42,7 @@ export default function UpcomingParticipated(props) {
       const now = new Date()
 
       let times = {}
-      data.forEach((challenge) => {
+      data?.forEach((challenge) => {
         let delta
         if (challenge.start_date && challenge.end_date) {
           if (convertFromUTC(challenge.start_date) > now) {
@@ -96,7 +96,7 @@ export default function UpcomingParticipated(props) {
     <PageWrapper title='Upcoming Participated Challenges'>
       <Box>
         <List>
-          {data.map((item, index) => (
+          {data?.map((item, index) => (
             <ListItem button key={`challenge-${index}`}>
               <ListItemText>{item.name}</ListItemText>
               <Typography color='secondary'>

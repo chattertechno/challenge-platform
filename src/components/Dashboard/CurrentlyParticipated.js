@@ -29,7 +29,7 @@ export default function CurrentlyParticipated(props) {
 
   const data = useMemo(
     () =>
-      challenges.filter(
+      challenges?.filter(
         (challenge) =>
           challenge.start_date &&
           convertFromUTC(challenge.start_date) < new Date() &&
@@ -42,7 +42,7 @@ export default function CurrentlyParticipated(props) {
   )
 
   const totalGoal = useMemo(
-    () => data.reduce((sum, current) => sum + current.goal, 0),
+    () => data?.reduce((sum, current) => sum + current.goal, 0),
     [data]
   )
 
@@ -51,7 +51,7 @@ export default function CurrentlyParticipated(props) {
       const now = new Date()
 
       let times = {}
-      data.forEach((challenge) => {
+      data?.forEach((challenge) => {
         let delta
         if (challenge.start_date && challenge.end_date) {
           if (convertFromUTC(challenge.end_date) > now) {
@@ -111,7 +111,7 @@ export default function CurrentlyParticipated(props) {
           </Grid>
         </Grid>
         <List>
-          {data.map((item, index) => (
+          {data?.map((item, index) => (
             <ListItem button key={`challenge-${index}`}>
               <ListItemText>{item.name}</ListItemText>
               <Typography color='primary'>

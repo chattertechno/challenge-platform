@@ -29,7 +29,7 @@ export default function CurrentlyCoordinated(props) {
 
   const data = useMemo(
     () =>
-      challenges.filter(
+      challenges?.filter(
         (challenge) =>
           challenge.start_date &&
           convertFromUTC(challenge.start_date) < new Date() &&
@@ -42,7 +42,7 @@ export default function CurrentlyCoordinated(props) {
 
   const totalParticipants = useMemo(
     () =>
-      data.reduce(
+      data?.reduce(
         (sum, current) =>
           sum + (current.participants ? current.participants.length : 0),
         0
@@ -55,7 +55,7 @@ export default function CurrentlyCoordinated(props) {
       const now = new Date()
 
       let times = {}
-      data.forEach((challenge) => {
+      data?.forEach((challenge) => {
         let delta
         if (challenge.start_date && challenge.end_date) {
           if (convertFromUTC(challenge.end_date) > now) {
@@ -115,7 +115,7 @@ export default function CurrentlyCoordinated(props) {
           </Grid>
         </Grid>
         <List>
-          {data.map((item, index) => (
+          {data?.map((item, index) => (
             <ListItem button key={`challenge-${index}`}>
               <ListItemText>{item.name}</ListItemText>
               <Typography color='primary'>
