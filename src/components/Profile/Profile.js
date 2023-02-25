@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
 import { updateUser } from 'services/user'
+import Typography from '@material-ui/core/Typography'
 import PageWrapper from 'components/common/PageWrapper/PageWrapper'
 import {
   Avatar,
@@ -15,6 +16,8 @@ import {
 } from '@material-ui/core'
 import { getAvatarString } from 'utils'
 import { useAppState } from '../../context/stateContext'
+import { useEffect } from 'react'
+import { getDashAccount, getMnemonic } from 'utils'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -45,16 +48,31 @@ const Profile = () => {
   const { currentUser, useFetchUser } = useAppState()
   const [user, setUser] = useState({})
   const [loading, setLoading] = useState(true)
+  const [accountInfo, setAccountInfo] = React.useState({})
 
+  const [imageUrl, setImageUrl] = useState(null)
   useFetchUser()
-
+  const [selectedImage, setSelectedImage] = useState(null)
+React.useEffect(() => {
+    const mnemonic = getMnemonic()
+    //console.log(mnemonic)
+    getDashAccount(mnemonic)
+      .then((account) => {
+        setAccountInfo(account)
+        debugger
+        localStorage.setItem('mnemonic', mnemonic)
+      })
+      .catch((e) => {
+        toast.error(e.toString())
+      })
+  }, [])
   React.useEffect(() => {
     if (currentUser) {
       setLoading(false)
       setUser(currentUser)
     }
   }, [currentUser])
-
+  console.log(user)
   const onSave = React.useCallback(() => {
     mutateUpdateUser(user, {
       onSuccess: ({ data }) => {
@@ -67,6 +85,18 @@ const Profile = () => {
     })
   }, [mutateUpdateUser, user])
 
+  
+  useEffect(() => {
+    if (selectedImage) {
+      setImageUrl(URL.createObjectURL(selectedImage))
+
+      localStorage.setItem('imge', imageUrl)
+      setUser({ ...user, avatar: imageUrl })
+    }
+  })
+  const handleUpload = (e) => {
+    setSelectedImage(e.target.files[0])
+  }
   return (
     <Container maxWidth='md' className={styles.container}>
       <PageWrapper title={'Profile'}>
@@ -74,11 +104,45 @@ const Profile = () => {
           {loading && <CircularProgress />}
           {!loading && (
             <Grid container direction='column' spacing={3} alignItems='center'>
+
               <Grid item>
-                <Avatar className={styles.avatar}>
-                  {getAvatarString(user.username)}
-                </Avatar>
+                {imageUrl ? (
+                  <img
+                    className={styles.avatar}
+                    src={imageUrl}
+                    alt=''
+                    width={200}
+                  />
+                ) : (
+                  <div>
+                    <Box position='relative'>
+                      <Avatar className={styles.avatar}>
+                        {getAvatarString(user.username)}
+                      </Avatar>
+                    </Box>
+                    <Box position='absolute' mt='-100px'>
+                      <input
+                        className={styles.input}
+                        accept='image/*'
+                        type='file'
+                        id='select-image'
+                        name='Upload a file'
+                        style={{
+                          zIndex: -1000,
+                          cursor: 'pointer',
+                          opacity: '0',
+                          width: 130,
+                          height: 130,
+                          fontSize: 50,
+                        }}
+                        onChange={handleUpload}
+                      />
+                    </Box>
+                  </div>
+                )}
               </Grid>
+                            <Typography>Your Dash Address is</Typography>
+            <div className={styles.dashAddress}>{accountInfo.address}</div>
               <Grid item>
                 <TextField
                   className={styles.textInput}

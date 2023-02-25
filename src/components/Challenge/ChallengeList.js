@@ -109,7 +109,7 @@ export default function ChallengeList() {
             </Button>
           </Box>
           <EnhancedTable
-            data={filteredData}
+            data={challenges}
             onFilter={handleFilter}
             users={coordinators}
             currentUser={currentUser}

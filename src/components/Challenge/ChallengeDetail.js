@@ -132,18 +132,20 @@ export default function ChallengeDetail() {
         id,
         data: {
           username: currentUser.username,
+          participants:challenge.participants
         },
       },
       {
         onSuccess: () => {
           setLoading(false)
+          reload()
         },
         onError: () => {
           toast.error(`Can't join the challenge.`)
         },
       }
     )
-  }, [currentUser, id, mutateJoinChallenge])
+  }, [currentUser, id,challenge, mutateJoinChallenge])
 
   const reload = useCallback(() => {
     if (id) {
@@ -204,7 +206,7 @@ export default function ChallengeDetail() {
                 <Button
                   variant='contained'
                   color='primary'
-                  disabled={joinAvailability}
+                  // disabled={joinAvailability}
                   fullWidth
                   size='large'
                   onClick={handleJoin}

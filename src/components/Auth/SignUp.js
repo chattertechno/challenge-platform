@@ -11,6 +11,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import { registerUser } from 'services'
 import { getDashAccount, getMnemonic } from 'utils'
 import Routes from 'routes'
+import { isIdentity, isPassword } from '../../services/utilities'
+import PasswordStrengthBar from 'react-password-strength-bar'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -109,7 +111,7 @@ const SignUp = () => {
   }, [username, password, mutate, accountInfo, history])
 
   const isCreateDisabled = React.useMemo(() => {
-    return !username || !password || password !== confirm
+    return isIdentity(username) || isPassword(password) || password !== confirm
   }, [password, confirm, username, accountInfo])
 
   return (
@@ -131,6 +133,13 @@ const SignUp = () => {
               value={username}
               onChange={handleUsernameChange}
             />
+            {username && isIdentity(username) && (
+                    <div>
+                      <small style={{ color: "red",paddingBottom: 20 }}>
+                        Must be Less than 20 characters !
+                      </small>
+                    </div>
+                  )}
             <TextField
               className={styles.textInput}
               label='Password'
@@ -147,6 +156,20 @@ const SignUp = () => {
               value={confirm}
               onChange={handleConfirmChange}
             />
+
+                  {password && isPassword(password) && (
+                    <div>
+                      <small style={{ color: "red" }} >
+                        Must be at least 8 characters long and include upper and
+                        lowercase letters and at least one number !
+                      </small>
+                    </div>
+                  )}
+          
+        <PasswordStrengthBar
+                      style={{ marginTop: 10 }}
+                      password={password}
+                    />
             <Button
               disabled={isCreateDisabled}
               className={styles.unlockButton}
