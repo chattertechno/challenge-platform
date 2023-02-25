@@ -18,7 +18,7 @@ export default function UpcomingCoordinated(props) {
 
   const data = useMemo(
     () =>
-      challenges.filter(
+      challenges?.filter(
         (challenge) =>
           challenge.start_date &&
           convertFromUTC(challenge.start_date) > new Date() &&
@@ -33,7 +33,7 @@ export default function UpcomingCoordinated(props) {
       const now = new Date()
 
       let times = {}
-      data.forEach((challenge) => {
+      data?.forEach((challenge) => {
         let delta
         if (challenge.start_date && challenge.end_date) {
           if (convertFromUTC(challenge.start_date) > now) {
@@ -81,7 +81,7 @@ export default function UpcomingCoordinated(props) {
     <PageWrapper title='Upcoming Coordinated Challenges'>
       <Box>
         <List>
-          {data.map((item, index) => (
+          {data?.map((item, index) => (
             <ListItem button key={`challenge-${index}`}>
               <ListItemText
                 primary={item.name}

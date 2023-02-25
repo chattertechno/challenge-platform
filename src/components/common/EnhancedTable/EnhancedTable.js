@@ -33,13 +33,13 @@ function getComparator(order, orderBy) {
 }
 
 function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index])
-  stabilizedThis.sort((a, b) => {
+  const stabilizedThis = array?.map((el, index) => [el, index])
+  stabilizedThis?.sort((a, b) => {
     const order = comparator(a[0], b[0])
     if (order !== 0) return order
     return a[1] - b[1]
   })
-  return stabilizedThis.map((el) => el[0])
+  return stabilizedThis?.map((el) => el[0])
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -103,6 +103,7 @@ export default function EnhancedTable(props) {
     },
     [onFilter]
   )
+  const datolo = stableSort(data, getComparator(order, orderBy))
 
   return (
     <div className={classes.root}>
@@ -119,11 +120,11 @@ export default function EnhancedTable(props) {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={data.length}
+              rowCount={data == null ? 1 : data.length}
             />
             <TableBody>
-              {stableSort(data, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              {datolo
+                ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`
 
@@ -193,10 +194,10 @@ export default function EnhancedTable(props) {
             10,
             20,
             50,
-            { value: data.length, label: SHOW_ALL },
+            { value: data == null ? 0 : data?.length, label: SHOW_ALL },
           ]}
           component='div'
-          count={data.length}
+          count={data == null ? 0 : data?.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

@@ -114,6 +114,7 @@ const EditChallenge = () => {
       if (mode === CREATE_MODE) {
         createDashEscrow()
           .then((dataEscrow) => {
+            debugger
             console.log(dataEscrow)
             const data = {
               ...values,
@@ -125,6 +126,7 @@ const EditChallenge = () => {
               goal_threshold: `${values.goal_threshold}`,
               goal_increaments: `${values.goal_increaments}`,
             }
+            debugger
             if (mode === CREATE_MODE) {
               mutateCreateChallenge(data, {
                 onSuccess: () => {
@@ -478,7 +480,7 @@ const EditChallenge = () => {
                           </Grid>
                         </Grid>
                       )}
-                      {values.status === 'private' && (
+                      {/* {values.status === 'private' && ( */}
                         <Grid
                           item
                           container
@@ -511,7 +513,7 @@ const EditChallenge = () => {
                             />
                           </Grid>
                         </Grid>
-                      )}
+                      {/* )} */}
                       <Grid
                         item
                         container

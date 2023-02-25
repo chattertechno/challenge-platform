@@ -27,7 +27,7 @@ export default function PastParticipated(props) {
 
   const data = useMemo(
     () =>
-      challenges.filter(
+      challenges?.filter(
         (challenge) =>
           challenge.end_date &&
           convertFromUTC(challenge.end_date) < new Date() &&
@@ -38,7 +38,7 @@ export default function PastParticipated(props) {
   )
 
   const totalGoal = useMemo(
-    () => data.reduce((sum, current) => sum + current.goal, 0),
+    () => data?.reduce((sum, current) => sum + current.goal, 0),
     [data]
   )
 
@@ -59,7 +59,7 @@ export default function PastParticipated(props) {
         </Grid>
         <Grid item xs={12} sm={6}>
           <List>
-            {data.map((item, index) => (
+            {data?.map((item, index) => (
               <ListItem button key={`challenge-${index}`}>
                 <ListItemText primary={item.name} />
                 {item.success ? (

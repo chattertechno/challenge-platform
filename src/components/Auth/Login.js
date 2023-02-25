@@ -1,4 +1,5 @@
-import React from 'react'
+import React,{useState,useRef}  from 'react'
+
 import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
@@ -10,6 +11,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import { login } from 'services/user'
 import { isAuthenticated } from 'utils'
 import Routes from 'routes'
+import ReCAPTCHA from "react-google-recaptcha";
+import PasswordStrengthBar from 'react-password-strength-bar'
+import { isIdentity, isPassword } from '../../services/utilities'
+
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -17,6 +22,12 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  container2: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(2),
     justifyContent: 'center',
   },
   wrapper: {
@@ -43,6 +54,8 @@ const Login = () => {
   const [password, setPassword] = React.useState('')
   const { mutate } = useMutation(login)
   const history = useHistory()
+  const captchaRef = useRef(null);
+  const TEST_SITE_KEY = "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI";
 
   React.useEffect(() => {
     if (isAuthenticated()) {
@@ -51,6 +64,8 @@ const Login = () => {
   }, [history])
 
   const handleUnlock = React.useCallback(() => {
+    let token = captchaRef.current.getValue();
+
     if (!identity || !password) {
       toast.error('Username and Password should not be blank')
       return
@@ -62,6 +77,7 @@ const Login = () => {
       },
       {
         onSuccess: ({ data: { msg: token } }) => {
+          debugger
           localStorage.setItem('token', token)
           history.push(Routes.Dashboard.path)
         },
@@ -81,11 +97,17 @@ const Login = () => {
     history.push(Routes.CreateWallet.path)
   }, [history])
   const isUnlockDisabled = React.useMemo(() => {
-    return !identity || !password
+    return isIdentity(identity) || isPassword(password)
   }, [identity, password])
+  const onChange = (value) => {
+    console.log("Captcha value:", value);
+  }
 
+  
   return (
+    <div  >
     <div className={styles.container}>
+    
       <Paper className={styles.wrapper}>
         <Typography className={styles.title} variant='h5' align='center'>
           Login
@@ -97,6 +119,13 @@ const Login = () => {
           value={identity}
           onChange={handleIdentityChange}
         />
+        {identity && isIdentity(identity) && (
+                    <div>
+                      <small style={{ color: "red",paddingBottom: 20 }}>
+                        Must be Less than 20 characters !
+                      </small>
+                    </div>
+                  )}
         <TextField
           className={styles.textInput}
           label='Password'
@@ -105,8 +134,27 @@ const Login = () => {
           value={password}
           onChange={handlePasswordChange}
         />
+                {password && isPassword(password) && (
+                    <div>
+                      <small style={{ color: "red" }} >
+                        Must be at least 8 characters long and include upper and
+                        lowercase letters and at least one number !
+                      </small>
+                    </div>
+                  )}
+          
+        <PasswordStrengthBar
+                      style={{ marginTop: 10 }}
+                      password={password}
+                    />
+
+<ReCAPTCHA
+    sitekey={TEST_SITE_KEY}
+    ref={captchaRef}
+    onChange={onChange}
+  />
         <Button
-          disabled={isUnlockDisabled}
+          style={{ marginTop: 10 }}
           className={styles.unlockButton}
           color='primary'
           variant='contained'
@@ -116,6 +164,8 @@ const Login = () => {
         </Button>
         <Button onClick={handleCreate}>Create Wallet</Button>
       </Paper>
+    
+    </div>  
     </div>
   )
 }
