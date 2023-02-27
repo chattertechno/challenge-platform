@@ -144,7 +144,7 @@ const Login = () => {
                   )}
           
         <PasswordStrengthBar
-                      style={{ marginTop: 10 }}
+                      style={{ marginTop: 12 }}
                       password={password}
                     />
 
