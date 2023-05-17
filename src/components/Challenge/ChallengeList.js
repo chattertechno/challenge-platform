@@ -44,8 +44,10 @@ export default function ChallengeList() {
       const data = challenges?.filter((challenge) => {
         let result = true
         // upcoming filter
-        result &= startDate
-          ? convertFromUTC(challenge.start_date) >= startDate
+        result &= challenge.start_date
+          ? startDate
+            ? convertFromUTC(challenge.start_date) >= startDate
+            : true
           : true
 
         // coordinator filter
