@@ -7,6 +7,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel'
 const headCells = [
   { id: 'name', disablePadding: true, label: 'Name', sortable: true },
   { id: 'status', disablePadding: false, label: 'Status', sortable: true },
+  { id: 'Winner', disablePadding: false, label: 'Winner', sortable: true },
   {
     id: 'start_date',
     disablePadding: false,
@@ -18,6 +19,12 @@ const headCells = [
     id: 'coordinator',
     disablePadding: false,
     label: 'Coordinator',
+    sortable: true,
+  },
+  {
+    id: 'minbet',
+    disablePadding: false,
+    label: 'Min Bet',
     sortable: true,
   },
   {

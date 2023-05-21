@@ -15,8 +15,11 @@ export const getChallenge = (id) => {
   return axios.get(`${API_URL}/${id}`)
 }
 
+export const postSteps = (payload) => {
+  return axios.put(`${API_URL}/user/steps/add/`, payload)
+}
+
 export const createChallenge = (payload) => {
-  console.log(payload)
   return axios.post(`${API_URL}/`, payload)
 }
 
