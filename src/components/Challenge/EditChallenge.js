@@ -66,6 +66,7 @@ const defaultValues = {
   description: '',
   goal: 'count',
   goal_threshold: 0,
+  goal_bet: 0,
   goal_increaments: 1,
   start_date: new Date(),
   end_date: new Date(),
@@ -114,8 +115,6 @@ const EditChallenge = () => {
       if (mode === CREATE_MODE) {
         createDashEscrow()
           .then((dataEscrow) => {
-            debugger
-            console.log(dataEscrow)
             const data = {
               ...values,
               coordinator: currentUser.username,
@@ -125,8 +124,8 @@ const EditChallenge = () => {
               end_date: convertDateToUTCString(values.end_date),
               goal_threshold: `${values.goal_threshold}`,
               goal_increaments: `${values.goal_increaments}`,
+              add_bet: `${values.add_bet}`,
             }
-            debugger
             if (mode === CREATE_MODE) {
               mutateCreateChallenge(data, {
                 onSuccess: () => {
@@ -158,7 +157,6 @@ const EditChallenge = () => {
             alert('Cant Create New challenge;')
           })
       } else {
-        console.log(values)
         const data = {
           ...values,
           coordinator: currentUser.username,
@@ -166,6 +164,7 @@ const EditChallenge = () => {
           end_date: convertDateToUTCString(values.end_date),
           goal_threshold: `${values.goal_threshold}`,
           goal_increaments: `${values.goal_increaments}`,
+          goal_bets: `${values.add_bet}`,
         }
         mutateUpdateChallenge(
           { id, data },
@@ -382,6 +381,31 @@ const EditChallenge = () => {
                       >
                         <Grid item xs={12} sm={3}>
                           <Typography className={styles.label}>
+                            Add Bet:
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={9}>
+                          <TextField
+                            label='Add Bet'
+                            variant='outlined'
+                            name='add_bet'
+                            type='number'
+                            error={Boolean(touched.add_bet && errors.add_bet)}
+                            helperText={touched.add_bet && errors.add_bet}
+                            value={values.add_bet}
+                            onChange={handleChange}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid
+                        item
+                        container
+                        direction='row'
+                        alignItems='center'
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={3}>
+                          <Typography className={styles.label}>
                             Start Date:
                           </Typography>
                         </Grid>
@@ -481,38 +505,38 @@ const EditChallenge = () => {
                         </Grid>
                       )}
                       {/* {values.status === 'private' && ( */}
-                        <Grid
-                          item
-                          container
-                          direction='row'
-                          alignItems='center'
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={3}>
-                            <Typography className={styles.label}>
-                              Recipient Dash Address
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={12} sm={9}>
-                            <TextField
-                              className={styles.textInput}
-                              label='Recipient Dash Address'
-                              variant='outlined'
-                              name='recipient_address'
-                              error={Boolean(
-                                touched.recipient_address &&
-                                  errors.recipient_address
-                              )}
-                              helperText={
-                                touched.recipient_address &&
-                                errors.recipient_address
-                              }
-                              value={values.recipient_address}
-                              onChange={handleChange}
-                              fullWidth
-                            />
-                          </Grid>
+                      <Grid
+                        item
+                        container
+                        direction='row'
+                        alignItems='center'
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={3}>
+                          <Typography className={styles.label}>
+                            Recipient Dash Address
+                          </Typography>
                         </Grid>
+                        <Grid item xs={12} sm={9}>
+                          <TextField
+                            className={styles.textInput}
+                            label='Recipient Dash Address'
+                            variant='outlined'
+                            name='recipient_address'
+                            error={Boolean(
+                              touched.recipient_address &&
+                                errors.recipient_address
+                            )}
+                            helperText={
+                              touched.recipient_address &&
+                              errors.recipient_address
+                            }
+                            value={values.recipient_address}
+                            onChange={handleChange}
+                            fullWidth
+                          />
+                        </Grid>
+                      </Grid>
                       {/* )} */}
                       <Grid
                         item

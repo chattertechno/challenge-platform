@@ -1,6 +1,6 @@
 # Dash Goal/Challenge Platform
 
-You can test the site [here](https://challenge-platform.herokuapp.com/).
+You can test the site [here](https://challenge-goal.herokuapp.com/).
 
 
 ## Installation
