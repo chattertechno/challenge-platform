@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
 import Container from '@material-ui/core/Container'
@@ -14,10 +14,8 @@ import {
   Grid,
   TextField,
 } from '@material-ui/core'
-import { getAvatarString } from 'utils'
+import { getAvatarString, getDashAccount, getMnemonic } from 'utils'
 import { useAppState } from '../../context/stateContext'
-import { useEffect } from 'react'
-import { getDashAccount, getMnemonic } from 'utils'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -53,14 +51,12 @@ const Profile = () => {
   const [imageUrl, setImageUrl] = useState(null)
   useFetchUser()
   const [selectedImage, setSelectedImage] = useState(null)
-React.useEffect(() => {
+  React.useEffect(() => {
     const mnemonic = getMnemonic()
     //console.log(mnemonic)
     getDashAccount(mnemonic)
       .then((account) => {
         setAccountInfo(account)
-        debugger
-        localStorage.setItem('mnemonic', mnemonic)
       })
       .catch((e) => {
         toast.error(e.toString())
@@ -85,15 +81,14 @@ React.useEffect(() => {
     })
   }, [mutateUpdateUser, user])
 
-  
   useEffect(() => {
     if (selectedImage) {
       setImageUrl(URL.createObjectURL(selectedImage))
 
       localStorage.setItem('imge', imageUrl)
-      setUser({ ...user, avatar: imageUrl })
-    }
-  })
+      setUser({ ...user, avatar: imageUrl })
+    }
+  }, [imageUrl, selectedImage, user])
   const handleUpload = (e) => {
     setSelectedImage(e.target.files[0])
   }
@@ -104,7 +99,6 @@ React.useEffect(() => {
           {loading && <CircularProgress />}
           {!loading && (
             <Grid container direction='column' spacing={3} alignItems='center'>
-
               <Grid item>
                 {imageUrl ? (
                   <img
@@ -141,8 +135,8 @@ React.useEffect(() => {
                   </div>
                 )}
               </Grid>
-                            <Typography>Your Dash Address is</Typography>
-            <div className={styles.dashAddress}>{accountInfo.address}</div>
+              <Typography>Your Dash Address is</Typography>
+              <div className={styles.dashAddress}>{accountInfo.address}</div>
               <Grid item>
                 <TextField
                   className={styles.textInput}
