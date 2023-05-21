@@ -121,7 +121,11 @@ export default function EnhancedTable(props) {
               const { name, value } = event.target
               setValues({ ...values, [name]: value })
               const filteredData = value
-                ? data.filter((f) => f.name && f.name.includes(value))
+                ? data.filter(
+                    (f) =>
+                      f.name &&
+                      f.name.toLowerCase().includes(value.toLowerCase())
+                  )
                 : data
 
               setFilterData(filteredData)
