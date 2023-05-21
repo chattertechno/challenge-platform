@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function EnhancedTable(props) {
-  const { data, onFilter, users, onOpen, onEdit, currentUser } = props
+  const { data, users, onOpen, onEdit, currentUser } = props
 
   const classes = useStyles()
   const [order, setOrder] = React.useState('asc')
@@ -102,19 +102,19 @@ export default function EnhancedTable(props) {
     setPage(0)
   }
 
-  const handleFilter = React.useCallback(
-    (filters) => {
-      onFilter(filters)
-    },
-    [onFilter]
-  )
+  // const handleFilter = React.useCallback(
+  //   (filters) => {
+  //     onFilter(filters)
+  //   },
+  //   [onFilter]
+  // )
   // const datolo = stableSort(data, getComparator(order, orderBy))
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar onFilter={handleFilter} users={users} />
-
+        <EnhancedTableToolbar users={users} />
+        {/* // onFilter={handleFilter} */}
         <Formik initialValues={keyword} enableReinitialize>
           {({ values, setValues }) => {
             const handleInputChange = (event) => {
@@ -283,7 +283,7 @@ export default function EnhancedTable(props) {
 
 EnhancedTable.propTypes = {
   data: PropTypes.array,
-  onFilter: PropTypes.func,
+  // onFilter: PropTypes.func,
   users: PropTypes.arrayOf(PropTypes.string),
   onOpen: PropTypes.func,
   onEdit: PropTypes.func,
