@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-
 import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
 import { useHistory } from 'react-router-dom'
@@ -9,7 +8,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { login } from 'services/user'
-import { isAuthenticated } from 'utils'
+import { getDashAccount, isAuthenticated } from 'utils'
 import Routes from 'routes'
 import ReCAPTCHA from 'react-google-recaptcha'
 import PasswordStrengthBar from 'react-password-strength-bar'
@@ -73,9 +72,13 @@ const Login = () => {
         password,
       },
       {
-        onSuccess: ({ data: { msg: token } }) => {
-          localStorage.setItem('token', token)
+        onSuccess: ({ data }) => {
+          localStorage.setItem('token', data?.msg)
+          localStorage.setItem('identity', identity)
           history.push(Routes.Dashboard.path)
+          getDashAccount().then((res) => {
+            console.log(res)
+          })
         },
         onError: () => {
           toast.error('Wrong credentials')
@@ -92,13 +95,6 @@ const Login = () => {
   const handleCreate = React.useCallback(() => {
     history.push(Routes.CreateWallet.path)
   }, [history])
-
-  // const isUnlockDisabled = React.useMemo(() => {
-  //   return isIdentity(identity) || isPassword(password)
-  // }, [identity, password])
-  // const onChange = (value) => {
-  //   console.log('Captcha value:', value)
-  // }
 
   return (
     <div>

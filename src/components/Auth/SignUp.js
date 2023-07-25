@@ -9,11 +9,12 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { registerUser } from 'services'
-import { getDashAccount, getMnemonic } from 'utils'
+import { getDashAccount } from 'utils'
 import Routes from 'routes'
 import { isIdentity, isPassword } from '../../services/utilities'
 import PasswordStrengthBar from 'react-password-strength-bar'
 import Modal from '../../shared/showModal'
+import { encryptMnemonic, secretKey } from 'utils/dash'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -58,9 +59,7 @@ const SignUp = () => {
   const [copyMnemonic, setCopyMnemonic] = React.useState('')
 
   React.useEffect(() => {
-    const mnemonic = getMnemonic()
-    //console.log(mnemonic)
-    getDashAccount(mnemonic)
+    getDashAccount()
       .then((account) => {
         setAccountInfo(account)
         const {
@@ -78,6 +77,13 @@ const SignUp = () => {
       })
   }, [])
 
+  React.useEffect(() => {
+    if (copyMnemonic)
+      encryptMnemonic(copyMnemonic, secretKey).then((res) =>
+        localStorage.setItem('code', res)
+      )
+  }, [copyMnemonic])
+
   const handleUsernameChange = React.useCallback(({ target: { value } }) => {
     setUsername(value)
   }, [])
@@ -90,14 +96,13 @@ const SignUp = () => {
 
   const handleCreate = React.useCallback(async () => {
     try {
-      // const id = await registerIdentity(getMnemonic())
-      const mnemonic = getMnemonic()
+      const mnemonic = localStorage.getItem('code')
       mutate(
         {
           username,
           password,
           identity: accountInfo.address,
-          mnemonic,
+          private_key: mnemonic,
         },
         {
           onError: (error) => {
@@ -177,7 +182,7 @@ const SignUp = () => {
             ) : (
               <>
                 <Typography>Your Dash Address is</Typography>
-                <div className={styles.dashAddress}>{accountInfo.address}</div>
+                <div className={styles.dashAddress}>{accountInfo?.address}</div>
                 <TextField
                   className={styles.textInput}
                   variant='outlined'

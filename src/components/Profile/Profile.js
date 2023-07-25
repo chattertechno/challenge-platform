@@ -16,6 +16,7 @@ import {
 } from '@material-ui/core'
 import { getAvatarString, getDashAccount, getMnemonic } from 'utils'
 import { useAppState } from '../../context/stateContext'
+import { decryptMnemonic, getMyFunds, jwtDecode, secretKey } from 'utils/dash'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -47,13 +48,11 @@ const Profile = () => {
   const [user, setUser] = useState({})
   const [loading, setLoading] = useState(true)
   const [accountInfo, setAccountInfo] = React.useState({})
-
   const [imageUrl, setImageUrl] = useState(null)
   useFetchUser()
   const [selectedImage, setSelectedImage] = useState(null)
   React.useEffect(() => {
     const mnemonic = getMnemonic()
-    //console.log(mnemonic)
     getDashAccount(mnemonic)
       .then((account) => {
         setAccountInfo(account)
@@ -68,7 +67,6 @@ const Profile = () => {
       setUser(currentUser)
     }
   }, [currentUser])
-  console.log(user)
   const onSave = React.useCallback(() => {
     mutateUpdateUser(user, {
       onSuccess: ({ data }) => {
@@ -80,6 +78,21 @@ const Profile = () => {
       },
     })
   }, [mutateUpdateUser, user])
+
+  function getFunds() {
+    toast.success('Please keep patience while you balance is loading...')
+    jwtDecode(localStorage.getItem('token')).then((res) => {
+      const pKey = res?.private_key
+      decryptMnemonic(pKey, secretKey).then((res) => {
+        if (res)
+          getMyFunds(res).then((res) => {
+            if (res) {
+              setUser({ ...user, balance: (res / 100000000).toFixed(3) })
+            }
+          })
+      })
+    })
+  }
 
   useEffect(() => {
     if (selectedImage) {
@@ -162,6 +175,19 @@ const Profile = () => {
                 />
               </Grid>
               <Grid item>
+                <TextField
+                  className={styles.textInput}
+                  variant='outlined'
+                  label='balance'
+                  value={user.balance ? user.balance : '0.00'}
+                  onChange={({ target: { value } }) =>
+                    setUser({ ...user, balance: value })
+                  }
+                  disabled={true}
+                  type={`${user.balance >= 0 ? 'text' : 'password'}`}
+                />
+              </Grid>
+              <Grid item>
                 <Button
                   color='primary'
                   variant='contained'
@@ -169,6 +195,16 @@ const Profile = () => {
                   onClick={onSave}
                 >
                   Save
+                </Button>
+              </Grid>
+              <Grid>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  className={styles.button}
+                  onClick={() => getFunds()}
+                >
+                  Get Balance
                 </Button>
               </Grid>
             </Grid>

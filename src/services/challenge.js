@@ -28,8 +28,7 @@ export const updateChallenge = (payload) => {
 }
 
 export const joinChallenge = (payload) => {
-  debugger
-  return axios.post(`${API_URL}/${payload.id}/join/`, payload.data)
+  return axios.post(`${API_URL}/join/`, payload.data)
 }
 
 interceptors(axios)

@@ -44,15 +44,15 @@ export default function PastParticipated(props) {
 
   return (
     <PageWrapper title='Past Participated Challenges'>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} alignItems='flex-start'>
+        {' '}
+        {/* Add alignItems prop */}
         <Grid item xs={12} sm={6} container spacing={4} direction='column'>
           <Grid item>
-            <Typography variant='h5' className={classes.alignCenter}>
-              Goal Metric Total:
-            </Typography>
+            <Typography variant='h5'>Goal Metric Total:</Typography>
           </Grid>
           <Grid item>
-            <Typography variant='h4' className={classes.alignCenter}>
+            <Typography variant='h4'  >
               <strong>{totalGoal}</strong>
             </Typography>
           </Grid>
