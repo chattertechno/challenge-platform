@@ -104,12 +104,10 @@ export default function CurrentlyCoordinated(props) {
       <Box>
         <Grid container spacing={4} direction='column'>
           <Grid item>
-            <Typography variant='h5' className={classes.alignCenter}>
-              Total Participants:
-            </Typography>
+            <Typography variant='h5'>Total Participants:</Typography>
           </Grid>
           <Grid item>
-            <Typography variant='h4' className={classes.alignCenter}>
+            <Typography variant='h4'>
               <strong>{totalParticipants}</strong>
             </Typography>
           </Grid>

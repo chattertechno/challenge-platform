@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import 'date-fns'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
@@ -40,7 +40,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 }))
 
 const EnhancedTableToolbar = (props) => {
-  const { onFilter, users } = props
+  const { users } = props
 
   const classes = useToolbarStyles()
   const [filters, setFilters] = React.useState({
@@ -51,9 +51,9 @@ const EnhancedTableToolbar = (props) => {
   })
   const [showFilters, setShowFilters] = React.useState(true)
 
-  useEffect(() => {
-    onFilter(filters)
-  }, [filters, onFilter])
+  // useEffect(() => {
+  //   onFilter(filters)
+  // }, [filters, onFilter])
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -181,7 +181,7 @@ const EnhancedTableToolbar = (props) => {
 }
 
 EnhancedTableToolbar.propTypes = {
-  onFilter: PropTypes.func,
+  // onFilter: PropTypes.func,
   users: PropTypes.arrayOf(PropTypes.string),
 }
 

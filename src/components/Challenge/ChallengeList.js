@@ -6,7 +6,6 @@ import EnhancedTable from 'components/common/EnhancedTable/EnhancedTable'
 import { getChallenges } from 'services/challenge'
 import { useHistory } from 'react-router'
 import { useAppState } from '../../context/stateContext'
-import { convertFromUTC } from 'utils/date'
 
 export default function ChallengeList() {
   const history = useHistory()
@@ -14,7 +13,7 @@ export default function ChallengeList() {
   const { mutate: mutateGetChallenges } = useMutation(getChallenges)
   const [loading, setLoading] = React.useState(true)
   const [challenges, setChallenges] = React.useState([])
-  const [filteredData, setFilteredData] = React.useState([])
+  // const [filteredData, setFilteredData] = React.useState([])
 
   const { currentUser, useFetchUser } = useAppState()
 
@@ -27,7 +26,7 @@ export default function ChallengeList() {
         onSuccess: ({ data }) => {
           setChallenges(data.data)
           // setChallenges(TEST_DATA)
-          setFilteredData(data.data)
+          // setFilteredData(data.data)
           setLoading(false)
         },
         onError: () => {
@@ -37,34 +36,30 @@ export default function ChallengeList() {
     )
   }, [mutateGetChallenges])
 
-  const handleFilter = React.useCallback(
-    (filters) => {
-      const { upcoming, coordinator, goal, startDate } = filters
-
-      const data = challenges?.filter((challenge) => {
-        let result = true
-        // upcoming filter
-        result &= startDate
-          ? convertFromUTC(challenge.start_date) >= startDate
-          : true
-
-        // coordinator filter
-        result &= coordinator ? challenge.coordinator === coordinator : true
-
-        // goal filter
-        result &= goal && goal !== 'all' ? challenge.goal === goal : true
-
-        // upcoming filter
-        result &= upcoming
-          ? convertFromUTC(challenge.start_date) > new Date()
-          : true
-
-        return result
-      })
-      setFilteredData(data)
-    },
-    [challenges]
-  )
+  // const handleFilter = React.useCallback(
+  //   (filters) => {
+  // const { upcoming, coordinator, goal, startDate } = filters
+  // const data = challenges?.filter((challenge) => {
+  //   console.log(challenges)
+  //   let result = true
+  //   // upcoming filter
+  //   result &= startDate
+  //     ? convertFromUTC(challenge.start_date) >= startDate
+  //     : true
+  //   // coordinator filter
+  //   result &= coordinator ? challenge.coordinator === coordinator : true
+  //   // goal filter
+  //   result &= goal && goal !== 'all' ? challenge.goal === goal : true
+  //   // upcoming filter
+  //   result &= upcoming
+  //     ? convertFromUTC(challenge.start_date) > new Date()
+  //     : true
+  //   return result
+  // })
+  // setFilteredData(data)
+  //   },
+  //   [challenges]
+  // )
 
   const handleCreate = React.useCallback(() => {
     history.push('/challenge/create')
@@ -110,7 +105,7 @@ export default function ChallengeList() {
           </Box>
           <EnhancedTable
             data={challenges}
-            onFilter={handleFilter}
+            // onFilter={handleFilter}
             users={coordinators}
             currentUser={currentUser}
             onOpen={onOpen}

@@ -74,22 +74,18 @@ export default function PastCoordinated(props) {
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6} container spacing={2} direction='column'>
           <Grid item>
-            <Typography variant='h5' className={classes.alignCenter}>
-              Total Participants:
-            </Typography>
+            <Typography variant='h5'>Total Participants:</Typography>
           </Grid>
           <Grid item>
-            <Typography variant='h4' className={classes.alignCenter}>
+            <Typography variant='h4'>
               <strong>{totalParticipants}</strong>
             </Typography>
           </Grid>
           <Grid item>
-            <Typography variant='h5' className={classes.alignCenter}>
-              Success Rate:
-            </Typography>
+            <Typography variant='h5'>Success Rate:</Typography>
           </Grid>
           <Grid item>
-            <Typography variant='h4' className={classes.alignCenter}>
+            <Typography variant='h4'>
               <strong>{successRate}%</strong>
             </Typography>
           </Grid>

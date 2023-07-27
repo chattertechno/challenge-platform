@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation } from 'react-query'
 import { toast } from 'react-toastify'
 import Container from '@material-ui/core/Container'
@@ -14,10 +14,9 @@ import {
   Grid,
   TextField,
 } from '@material-ui/core'
-import { getAvatarString } from 'utils'
+import { getAvatarString, getDashAccount, getMnemonic } from 'utils'
 import { useAppState } from '../../context/stateContext'
-import { useEffect } from 'react'
-import { getDashAccount, getMnemonic } from 'utils'
+import { decryptMnemonic, getMyFunds, jwtDecode, secretKey } from 'utils/dash'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -49,18 +48,14 @@ const Profile = () => {
   const [user, setUser] = useState({})
   const [loading, setLoading] = useState(true)
   const [accountInfo, setAccountInfo] = React.useState({})
-
   const [imageUrl, setImageUrl] = useState(null)
   useFetchUser()
   const [selectedImage, setSelectedImage] = useState(null)
-React.useEffect(() => {
+  React.useEffect(() => {
     const mnemonic = getMnemonic()
-    //console.log(mnemonic)
     getDashAccount(mnemonic)
       .then((account) => {
         setAccountInfo(account)
-        debugger
-        localStorage.setItem('mnemonic', mnemonic)
       })
       .catch((e) => {
         toast.error(e.toString())
@@ -72,7 +67,6 @@ React.useEffect(() => {
       setUser(currentUser)
     }
   }, [currentUser])
-  console.log(user)
   const onSave = React.useCallback(() => {
     mutateUpdateUser(user, {
       onSuccess: ({ data }) => {
@@ -85,15 +79,29 @@ React.useEffect(() => {
     })
   }, [mutateUpdateUser, user])
 
-  
+  function getFunds() {
+    toast.success('Please keep patience while you balance is loading...')
+    jwtDecode(localStorage.getItem('token')).then((res) => {
+      const pKey = res?.private_key
+      decryptMnemonic(pKey, secretKey).then((res) => {
+        if (res)
+          getMyFunds(res).then((res) => {
+            if (res) {
+              setUser({ ...user, balance: (res / 100000000).toFixed(3) })
+            }
+          })
+      })
+    })
+  }
+
   useEffect(() => {
     if (selectedImage) {
       setImageUrl(URL.createObjectURL(selectedImage))
 
       localStorage.setItem('imge', imageUrl)
-      setUser({ ...user, avatar: imageUrl })
-    }
-  })
+      setUser({ ...user, avatar: imageUrl })
+    }
+  }, [imageUrl, selectedImage, user])
   const handleUpload = (e) => {
     setSelectedImage(e.target.files[0])
   }
@@ -104,7 +112,6 @@ React.useEffect(() => {
           {loading && <CircularProgress />}
           {!loading && (
             <Grid container direction='column' spacing={3} alignItems='center'>
-
               <Grid item>
                 {imageUrl ? (
                   <img
@@ -141,8 +148,8 @@ React.useEffect(() => {
                   </div>
                 )}
               </Grid>
-                            <Typography>Your Dash Address is</Typography>
-            <div className={styles.dashAddress}>{accountInfo.address}</div>
+              <Typography>Your Dash Address is</Typography>
+              <div className={styles.dashAddress}>{accountInfo.address}</div>
               <Grid item>
                 <TextField
                   className={styles.textInput}
@@ -168,6 +175,19 @@ React.useEffect(() => {
                 />
               </Grid>
               <Grid item>
+                <TextField
+                  className={styles.textInput}
+                  variant='outlined'
+                  label='balance'
+                  value={user.balance ? user.balance : '0.00'}
+                  onChange={({ target: { value } }) =>
+                    setUser({ ...user, balance: value })
+                  }
+                  disabled={true}
+                  type={`${user.balance >= 0 ? 'text' : 'password'}`}
+                />
+              </Grid>
+              <Grid item>
                 <Button
                   color='primary'
                   variant='contained'
@@ -175,6 +195,16 @@ React.useEffect(() => {
                   onClick={onSave}
                 >
                   Save
+                </Button>
+              </Grid>
+              <Grid>
+                <Button
+                  color='primary'
+                  variant='contained'
+                  className={styles.button}
+                  onClick={() => getFunds()}
+                >
+                  Get Balance
                 </Button>
               </Grid>
             </Grid>

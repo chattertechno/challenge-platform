@@ -74,7 +74,9 @@ const NavBar = () => {
       <AppBar position='static'>
         <Toolbar>
           <Typography variant='h6' className={classes.title}>
-            Goal/Challenge Platform
+            <span onClick={() => history.push('/dashboard')}>
+              Goal/Challenge Platform
+            </span>
           </Typography>
           {auth ? (
             <Box display='flex' flexDirection='row' alignItems='center'>

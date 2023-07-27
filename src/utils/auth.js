@@ -5,4 +5,6 @@ export const isAuthenticated = () => {
 
 export const logOut = () => {
   localStorage.removeItem('token')
+  localStorage.removeItem('code')
+  localStorage.removeItem('identity')
 }
